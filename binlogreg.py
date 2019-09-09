@@ -8,7 +8,7 @@ def binlogreg_train(x, y_):
     param_delta = 0.001
     # param_lambda = 0
 
-    w = np.random.randn(2)
+    w = np.random.randn(x.shape[1])
     b = 0
 
     # gradijentni spust (param_niter iteracija)
@@ -66,9 +66,9 @@ def binlogreg_classify(x, w, b):
     return softmax(scores)
 
 
-def binlogreg_decfun(w,b):
+def binlogreg_decfun(w, b):
     def classify(X):
-        return binlogreg_classify(X, w,b)
+        return binlogreg_classify(X, w, b)
     return classify
 
 
