@@ -5,7 +5,7 @@ import data
 
 def logreg_train(x, y_):
     param_niter = 1000
-    param_delta = 0.001
+    param_delta = 0.0001
     # param_lambda = 0
 
     n = x.shape[0]
@@ -19,11 +19,7 @@ def logreg_train(x, y_):
 
         scores = np.dot(x, w) + b   # N x C
 
-        # brojnik softmaxa
-        expscores = np.exp(scores)  # N x C
-        # nazivnik softmaxa
-        sumexp = np.sum(expscores, axis=1, keepdims=True)  # N x 1
-        probs = expscores / sumexp  # N x C
+        probs = stable_softmax(scores)
 
         # logaritmirane vjerojatnosti razreda
         logprobs = -np.log(probs[range(n), y_])  # N x C
@@ -50,6 +46,23 @@ def logreg_train(x, y_):
         b += -param_delta * grad_b
 
     return w, b
+
+
+def softmax(x):
+    # brojnik softmaxa
+    expscores = np.exp(x)  # N x C
+    # nazivnik softmaxa
+    sumexp = np.sum(expscores, axis=1, keepdims=True)  # N x 1
+    return expscores / sumexp  # N x C
+
+
+def stable_softmax(x):
+    a = np.max(x, axis=1)
+    # brojnik softmaxa
+    expscores = np.exp(x - np.max(x))  # N x C
+    # nazivnik softmaxa
+    sumexp = np.sum(expscores, axis=1, keepdims=True)  # N x 1
+    return expscores / sumexp  # N x C
 
 
 def logreg_classify(x, w, b):

@@ -48,13 +48,23 @@ def binlogreg_train(x, y_):
 
 
 def softmax(x):
-    return 1 / (1 + np.exp(-x))
+    # brojnik softmaxa
+    expscores = np.exp(x)  # N x C
+    # nazivnik softmaxa
+    sumexp = expscores + 1  # N x 1
+    return expscores / sumexp  # N x C
 
 
 def stable_softmax(x):
-    exp_x_shifted = np.exp(x - np.max(x))
-    probs = exp_x_shifted / np.sum(exp_x_shifted)
-    return probs
+    # brojnik softmaxa
+    expscores = np.exp(x - np.max(x))  # N x C
+    # nazivnik softmaxa
+    sumexp = expscores + np.exp(-np.max(x))  # N x 1
+    return expscores / sumexp  # N x C
+
+
+def softmax_simplified(x):
+    return 1 / (1 + np.exp(-x))
 
 
 def cross_entropy(y, probs):
